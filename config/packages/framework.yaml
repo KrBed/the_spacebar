@@ -1,3 +1,4 @@
+
 framework:
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
@@ -14,3 +15,13 @@ framework:
     #fragments: true
     php_errors:
         log: true
+    cache:
+        app: '%cache_adapter%'
+        system: cache.adapter.system
+        directory: '%kernel.cache_dir%/pools'
+        default_redis_provider: 'redis://localhost'
+        default_memcached_provider: 'memcached://localhost'
+        default_pdo_provider: null
+        pools: {  }
+
+

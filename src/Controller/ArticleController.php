@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 
+use App\Service\MarkdownHelper;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
@@ -23,6 +24,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
+    /**
+     * Currently unused: just showing a controller with a constructor!
+     */
+    private $isDebug;
+
+    public function __construct($isDebug)
+    {
+        $this->isDebug = $isDebug;
+    }
+
     /**
      * @Route("/", name="app_homepage")
      */
@@ -51,7 +62,7 @@ class ArticleController extends AbstractController
      * @param AdapterInterface $cache
      * @return Response
      */
-    public function show($slug, MarkdownParserInterface $markdown, AdapterInterface $cache)
+    public function show($slug,MarkdownHelper $markdownHelper)
     {
 
         $comments = [
@@ -77,12 +88,15 @@ cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim ca
 fugiat.
 EOF;
 
-        $item = $cache->getItem('markdown_'.md5($articleContent));
-        $articleContent = $markdown->transformMarkdown($articleContent);
-        if (!$item->isHit()) {
-            $item->set($articleContent);
-            $cache->save($item);
-        }
+//        $item = $cache->getItem('markdown_'.md5($articleContent));
+//
+//        if (!$item->isHit()) {
+//            $item->set($markdown->transformMarkdown($articleContent));
+//            $cache->save($item);
+//        }
+//        $articleContent = $item->get();
+//        dump($cache);die;
+        $articleContent = $markdownHelper->parse($articleContent);
 
         return $this->render("article/show.html.twig", ["title" => "My first blog", "slug" => str_replace("-", " ", ucwords($slug, "-")),
             "comments" => $comments, "articleContent" =>$articleContent]);
