@@ -14,6 +14,7 @@ use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
+use Nexy\Slack\Client;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +29,7 @@ class ArticleController extends AbstractController
      * Currently unused: just showing a controller with a constructor!
      */
     private $isDebug;
+
 
     public function __construct($isDebug)
     {
@@ -62,9 +64,18 @@ class ArticleController extends AbstractController
      * @param AdapterInterface $cache
      * @return Response
      */
-    public function show($slug,MarkdownHelper $markdownHelper)
+    public function show($slug, MarkdownHelper $markdownHelper, Client $slack)
     {
 
+        if ($slug == 'khaaaaaan') {
+            $message = $slack->createMessage()
+                ->from('Khan')
+                ->withIcon(':ghost')
+                ->setText('Ah,Kirk, my old friend...');
+            dump($message);
+            die;
+            $slack->sendMessage($message);
+        }
         $comments = [
             'I ate a normal rock once. It did NOT taste like bacon!',
             'Woohoo! I\'m going on an all-asteroid diet!',
@@ -99,7 +110,7 @@ EOF;
         $articleContent = $markdownHelper->parse($articleContent);
 
         return $this->render("article/show.html.twig", ["title" => "My first blog", "slug" => str_replace("-", " ", ucwords($slug, "-")),
-            "comments" => $comments, "articleContent" =>$articleContent]);
+            "comments" => $comments, "articleContent" => $articleContent]);
 
     }
 
