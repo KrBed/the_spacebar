@@ -5,7 +5,7 @@ nexy_slack:
     client: httplug.client
 
   # The Slack API Incoming WebHooks URL.
-  endpoint:            'https://hooks.slack.com/services/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'
+  endpoint:            '%env(SLACK_WEBHOOK_ENDPOINT)%'
   channel:              null
   username:             null
   icon:                 null
@@ -14,3 +14,8 @@ nexy_slack:
   unfurl_media:         true
   allow_markdown:       true
   markdown_in_attachments: []
+
+
+
+#
+#
