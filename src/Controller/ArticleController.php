@@ -10,11 +10,11 @@ namespace App\Controller;
 
 
 use App\Service\MarkdownHelper;
+use App\Service\SlackClient;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
-use Nexy\Slack\Client;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -64,17 +64,11 @@ class ArticleController extends AbstractController
      * @param AdapterInterface $cache
      * @return Response
      */
-    public function show($slug, MarkdownHelper $markdownHelper, Client $slack)
+    public function show($slug, MarkdownHelper $markdownHelper, SlackClient $slack)
     {
 
         if ($slug == 'khaaaaaan') {
-            $message = $slack->createMessage()
-                ->from('Khan')
-                ->withIcon(':ghost')
-                ->setText('Ah,Kirk, my old friend...');
-            dump($message);
-            die;
-            $slack->sendMessage($message);
+            $slack->SendMessage('Khan','Ah,Kirk, my old friend...');
         }
         $comments = [
             'I ate a normal rock once. It did NOT taste like bacon!',
