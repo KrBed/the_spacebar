@@ -41,7 +41,6 @@ class MarkdownHelper
             $this->logger->info("They are talking about beacon again");
         }
 
-//        dump($this->cache);die;
         if ($this->isDebug) {
             return $this->markdown->transform($source);
         }
