@@ -44,6 +44,9 @@ EOF
         if (rand(1, 10) > 2) {
             $article->setPublishedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
         }
+        $article->setAuthor('Mike Ferengi');
+        $article->setHeartCount(rand(1,10));
+        $article->setImageFilename('asteroid.jpeg');
         $em->persist($article);
         $em->flush();
         return new Response(sprintf('Hay! New article id : %d , %s', $article->getId(), $article->getSlug()));

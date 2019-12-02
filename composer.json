@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "cache/apcu-adapter": "^1.0",
+        "doctrine/doctrine-migrations-bundle": "^2.1",
         "knplabs/knp-markdown-bundle": "^1.7",
         "knplabs/knp-time-bundle": "^1.9",
         "nexylan/slack-bundle": "^2.2",

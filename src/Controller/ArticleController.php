@@ -16,6 +16,7 @@ use App\Service\SlackClient;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Psr\Container\ContainerInterface;
@@ -70,7 +71,7 @@ class ArticleController extends AbstractController
             'Woohoo! I\'m going on an all-asteroid diet!',
             'I like bacon too! Buy some from my site! bakinsomebacon.com',
         ];
-        
+
         return $this->render("article/show.html.twig", ['article' => $article, "comments" => $comments]);
     }
 
@@ -79,14 +80,13 @@ class ArticleController extends AbstractController
      * @Route("/news/{slug}/heart",name="article_toogle_heart",methods={"POST"})
      * @return JsonResponse
      */
-    public function toogleArticleHeart($slug, LoggerInterface $logger, ContainerInterface $container)
+    public function toogleArticleHeart(Article $article, LoggerInterface $logger, EntityManagerInterface $em)
     {
-
-        $heart = rand(5, 100);
+        $article->incrementHeartCount();
+        $em->flush();
         $logger->info("article is being hearted");
 
-
-        return new JsonResponse(['hearts' => $heart]);
+        return new JsonResponse(['hearts' => $article->getHeartCount()]);
     }
 
 }
