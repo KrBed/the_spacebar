@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use  Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
@@ -69,7 +70,8 @@ class Article
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article",fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $comments;
 
@@ -167,10 +169,13 @@ class Article
         return $this;
     }
 
-    public function getImagePath(){
-         return 'images/'.$this->getImageFilename();
+    public function getImagePath()
+    {
+        return 'images/' . $this->getImageFilename();
     }
-    public function incrementHeartCount():self{
+
+    public function incrementHeartCount(): self
+    {
 
         $this->heartCount = $this->heartCount + 1;
 
@@ -199,6 +204,13 @@ class Article
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public function getNotDeletedComments(): Collection
+    {
+        $criteria = ArticleRepository::createNonDeletedCriteria();
+
+        return $this->comments->matching($criteria);
     }
 
     /**
