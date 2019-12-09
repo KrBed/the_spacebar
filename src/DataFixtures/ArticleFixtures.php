@@ -42,7 +42,7 @@ class ArticleFixtures extends BaseFixture
 
             $comment1 = new Comment();
             $comment1->setAuthorName('Mike Ferengi');
-            $comment1->setContent("I ate a normal rock once. It did NOT taste like bacon!");
+            $comment1->setContent("I ate a normal rock once. It did NOT taste like bacon! I ate a normal rock once. It did NOT taste like bacon! I ate a normal rock once. It did NOT taste like bacon! I ate a normal rock once. It did NOT taste like bacon!");
             $comment1->setArticle($article);
             $manager->persist($comment1);
 
