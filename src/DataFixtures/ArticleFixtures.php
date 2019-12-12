@@ -22,6 +22,7 @@ class ArticleFixtures extends BaseFixture
     private static $articleAuthors = [
         'Mike Ferengi',
         'Amy Oort',
+        'Krzysztof Bednarski'
     ];
 
     /**
@@ -39,18 +40,6 @@ class ArticleFixtures extends BaseFixture
             $article->setAuthor($this->faker->randomElement(self::$articleAuthors))
                 ->setHeartCount($this->faker->numberBetween(5,100))
                 ->setImageFilename($this->faker->randomElement(self::$articleImages));
-
-            $comment1 = new Comment();
-            $comment1->setAuthorName('Mike Ferengi');
-            $comment1->setContent("I ate a normal rock once. It did NOT taste like bacon!");
-            $comment1->setArticle($article);
-            $manager->persist($comment1);
-
-            $comment2 = new Comment();
-            $comment2->setAuthorName('Mike Ferengi');
-            $comment2->setContent('Woohoo! I\'m going on an all-asteroid diet!');
-            $comment2->setArticle($article);
-            $manager->persist($comment2);
         });
         $manager->flush();
     }

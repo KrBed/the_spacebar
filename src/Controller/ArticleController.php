@@ -22,6 +22,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Reflection;
+use ReflectionObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,6 +45,9 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/", name="app_homepage")
+     * @param ArticleRepository $repository
+     * @param EntityManager $manager
+     * @return Response
      */
     public function homepage(ArticleRepository $repository)
     {

@@ -19,6 +19,16 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
+    public function findAllWithSearch(?string $term){
+        $qb = $this->createQueryBuilder('c')
+        ->innerJoin('c.article','a')->addSelect('a');
+
+        $qb->andWhere('c.content LIKE :searchTerm OR c.authorName LIKE :searchTerm a.title LIKE :searchTerm')->andWhere('')
+            ->setParameter('searchTerm', '%'.$term.'%' );
+
+        return $qb->orderBy('c.createdAt','DESC')->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

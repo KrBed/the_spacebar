@@ -13,14 +13,18 @@ class CommentAdminController extends AbstractController
     /**
      * @Route("/admin/comment", name="comment_admin")
      */
-    public function index(CommentRepository $commentRepository, Request $request )
+    public function index(CommentRepository $commentRepository, Request $request)
     {
         $q = $request->query->get('q');
 
-        $comments = $commentRepository->findBy([],['createdAt'=>'DESC']);
+        if (empty($q)) {
+            $comments = $commentRepository->findBy([], ['createdAt' => 'DESC']);
+        } else {
+            $comments = $commentRepository->findAllWithSearch($q);
+        }
 
         return $this->render('comment_admin/index.html.twig', [
-            'comments'=>$comments
+            'comments' => $comments
         ]);
     }
 }
