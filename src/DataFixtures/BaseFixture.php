@@ -22,6 +22,15 @@ abstract class BaseFixture extends Fixture
 
     abstract protected function loadData(ObjectManager $manager);
 
+    protected function getRandomReferences(string $className, int $count)
+    {
+        $references = [];
+        while (count($references) < $count) {
+            $references[] = $this->getRandomReference($className);
+        }
+        return $references;
+    }
+
     protected function getRandomReference(string $className) {
         if (!isset($this->referencesIndex[$className])) {
             $this->referencesIndex[$className] = [];
