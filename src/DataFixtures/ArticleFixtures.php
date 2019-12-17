@@ -32,22 +32,29 @@ class ArticleFixtures extends BaseFixture implements DependentFixtureInterface
      */
     public function loadData(ObjectManager $manager)
     {
-        $this->createMany(Article::class, 10, function(Article $article) use ($manager) {
+        $this->createMany(10, 'main_articles', function($count) use ($manager) {
+            $article = new Article();
             $article->setTitle($this->faker->randomElement(self::$articleTitles))
-                ->setContent($this->faker->text);
+                ->setContent($this->faker->realText());
+
             // publish most articles
             if ($this->faker->boolean(70)) {
-                $article->setPublishedAt($this->faker->dateTimeBetween('-100 days','-1 day'));
+                $article->setPublishedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
             }
-            $article->setAuthor($this->faker->randomElement(self::$articleAuthors))
-                ->setHeartCount($this->faker->numberBetween(5,100))
-                ->setImageFilename($this->faker->randomElement(self::$articleImages));
 
-            $tags = $this->getRandomReferences(Tag::class,$this->faker->numberBetween(0,5));
-            foreach ($tags as $tag){
+            $article->setAuthor($this->faker->randomElement(self::$articleAuthors))
+                ->setHeartCount($this->faker->numberBetween(5, 100))
+                ->setImageFilename($this->faker->randomElement(self::$articleImages))
+            ;
+
+            $tags = $this->getRandomReferences('main_tags', $this->faker->numberBetween(0, 5));
+            foreach ($tags as $tag) {
                 $article->addTag($tag);
             }
+
+            return $article;
         });
+
         $manager->flush();
     }
 
