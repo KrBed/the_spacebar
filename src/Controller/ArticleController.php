@@ -11,19 +11,11 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
-use App\Repository\CommentRepository;
-use App\Service\MarkdownHelper;
 use App\Service\SlackClient;
-use Doctrine\Common\Annotations\Annotation;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Reflection;
-use ReflectionObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,7 +44,7 @@ class ArticleController extends AbstractController
     public function homepage(ArticleRepository $repository)
     {
             $articles = $repository->findAllPublishedOrderedByNewest();
-            $array = [];
+
             return $this->render("article/homepage.html.twig", ['articles' => $articles]);
     }
 

@@ -5,10 +5,18 @@ namespace App\Controller;
 use App\Repository\CommentRepository;
 
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+
+/**
+ * Class CommentAdminController
+ * @package App\Controller
+ * @IsGranted("ROLE_ADMIN")
+ */
 class CommentAdminController extends AbstractController
 {
     /**
@@ -16,6 +24,7 @@ class CommentAdminController extends AbstractController
      */
     public function index(CommentRepository $commentRepository, Request $request,PaginatorInterface $paginator)
     {
+//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $q = $request->query->get('q');
 
 //        if (empty($q)) {
