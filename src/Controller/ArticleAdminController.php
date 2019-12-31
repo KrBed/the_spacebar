@@ -5,30 +5,61 @@ namespace App\Controller;
 
 
 use App\Entity\Article;
+use App\Form\ArticleFormType;
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Class ArticleAdminController
- * @package App\Controller
- * @IsGranted("ROLE_ADMIN")
- */
 
 class ArticleAdminController extends AbstractController
 {
     /**
      * @Route("admin/article/new", name="admin_article_new")
+     * @IsGranted("ROLE_ADMIN_ARTICLE")
      */
-    public function new(EntityManagerInterface $em)
+    public function new(EntityManagerInterface $em, Request $request)
     {
-        /**
-         * @var Article
-         */
-        die('todo');
 
-        return new Response(sprintf('Hay! New article id : %d , %s', $article->getId(), $article->getSlug()));
+        $form = $this->createForm(ArticleFormType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Article $article */
+            $article = $form->getData();
+
+            $em->persist($article);
+            $em->flush();
+
+            $this->addFlash("success", 'Article created');
+
+            return $this->redirectToRoute('admin_article_list');
+        }
+
+        return $this->render('article_admin/new.html.twig', ['articleForm' => $form->createView()]);
+    }
+
+    /**
+     * @Route(path="/admin/article/{id}/edit")
+     * @IsGranted("MANAGE",subject="article")
+     */
+    public function edit(Article $article)
+    {
+//        $this->denyAccessUnlessGranted('MANAGE',$article);
+        dd($article, $this->getUser());
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/article_admin/article" , name="admin_article_list")
+     * @param ArticleRepository $articleRepo
+     */
+    public function list(ArticleRepository $articleRepo)
+    {
+        $articles = $articleRepo->findAll();
+
+        return $this->render('article_admin/list.html.twig',['articles'=>$articles]);
     }
 }
