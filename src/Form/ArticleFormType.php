@@ -30,9 +30,13 @@ class ArticleFormType extends AbstractType
         $builder->add('title', TextType::class, ['help' => 'Choose something catchy'])
             ->add('content')
             ->add('publishedAt', null, ['widget' => 'single_text'])
-            ->add('author', EntityType::class, array('class' => User::class, 'choice_label' => function (User $user) {
-                return sprintf("(%d)%s", $user->getId(), $user->getEmail());
-            }, 'placeholder' => 'Choose an author','choices' => $this->userRepository->findAllEmailAlphabetical(),'invalid_message'=>'Symfony is too smart for your chacking'));
+            ->add('author',UserSelectFormType::class
+
+            );
+
+//            ->add('author', EntityType::class, array('class' => User::class, 'choice_label' => function (User $user) {
+//                return sprintf("(%d)%s", $user->getId(), $user->getEmail());
+//            }, 'placeholder' => 'Choose an author','choices' => $this->userRepository->findAllEmailAlphabetical(),'invalid_message'=>'Symfony is too smart for your chacking'));
     }
 
     public function configureOptions(OptionsResolver $resolver)
